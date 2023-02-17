@@ -1,6 +1,2 @@
-labelToVoxMesh/Input
-labelToVoxMesh/Output
-
-removeLabelsFromBrainAtlas/atlasStructure.json
-removeLabelsFromBrainAtlas/hncma-atlas-lut.ctbl
-removeLabelsFromBrainAtlas/hncma-atlas.nrrd
+labelToVoxMesh/data/
+removeLabelsFromBrainAtlas/data/
