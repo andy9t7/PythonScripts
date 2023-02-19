@@ -1,6 +1,7 @@
 import slicer
 import vtk
 import json
+import numpy as np
 
 # Import segmentation from a nrrd + color table file
 colorNode = slicer.util.loadColorTable('/Users/andy/Documents/PythonScripts/removeLabelsFromBrainAtlas/data/hncma-atlas-lut.ctbl')
@@ -44,9 +45,9 @@ def getLabelArray1(mesh, segmentation, atlasStructureJSON):
    label_array.SetName("atlas-label")
 
    # for tracking progress
-   indexAt25 = round(mesh.GetPoints().GetNumberOfPoints())/4
-   indexAt50 = round(mesh.GetPoints().GetNumberOfPoints())/2
-   indexAt75 = round(mesh.GetPoints().GetNumberOfPoints())*3/4
+   indexAt25 = round(mesh.GetPoints().GetNumberOfPoints()/4)
+   indexAt50 = round(mesh.GetPoints().GetNumberOfPoints()/2)
+   indexAt75 = round(mesh.GetPoints().GetNumberOfPoints()/4*3)
 
    for pointIndex in range(mesh.GetPoints().GetNumberOfPoints()):
 
@@ -71,11 +72,15 @@ def getLabelArray1(mesh, segmentation, atlasStructureJSON):
             if segmentName['@type'] == 'Structure':
                if segmentName['annotation']['name'] == segment.GetName():
                   label_array.InsertNextValue(segmentName['sourceSelector'][0]['dataKey']) 
+      
+      else:
+         label_array.InsertNextValue(0)
    return label_array
 
 
 label_array = getLabelArray1(mesh, segmentation, atlasStructureJSON)
-
+print(label_array)
+np.savetxt("label_array.dat", label_array)
 mesh.GetPointData().AddArray(label_array)
 
 writer = vtk.vtkXMLUnstructuredGridWriter()
